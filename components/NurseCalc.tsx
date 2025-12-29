@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import AdBanner from './AdBanner';
 
 const InfoIcon = () => (
   <svg className="w-3.5 h-3.5 text-slate-400 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -294,6 +295,9 @@ const DoseCalculator = () => {
                 </div>
               </div>
             </div>
+            
+            {/* Iklan Spesifik di bawah Informasi Klinis */}
+            <AdBanner slot="6669871545" format="auto" className="mt-6" />
           </div>
         )}
       </div>

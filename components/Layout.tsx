@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { NavigationTab } from '../types';
+import AdBanner from './AdBanner';
 
 interface LayoutProps {
   activeTab: NavigationTab;
@@ -34,7 +35,7 @@ const Layout: React.FC<LayoutProps> = ({ activeTab, setActiveTab, userName, onLo
           <h1 className="text-xl font-bold text-slate-800 tracking-tight">NursePro</h1>
         </div>
 
-        <nav className="flex-1 space-y-2">
+        <nav className="flex-1 space-y-2 overflow-y-auto custom-scrollbar pr-2">
           {navItems.map((item) => (
             <button
               key={item.id}
@@ -49,6 +50,11 @@ const Layout: React.FC<LayoutProps> = ({ activeTab, setActiveTab, userName, onLo
               {item.label}
             </button>
           ))}
+          
+          {/* Slot Iklan Sidebar (Desktop Only) */}
+          <div className="mt-6 pt-6 border-t border-slate-50">
+             <AdBanner slot="1234567890" format="rectangle" />
+          </div>
         </nav>
         
         <div className="mt-auto pt-6 border-t border-slate-100 space-y-4">
@@ -85,7 +91,21 @@ const Layout: React.FC<LayoutProps> = ({ activeTab, setActiveTab, userName, onLo
               {userInitials}
             </button>
         </header>
-        {children}
+        
+        <div className="flex flex-col min-h-full">
+            <div className="flex-1">
+                {children}
+            </div>
+            
+            {/* Slot Iklan Footer Konten (Mobile & Desktop) */}
+            <footer className="max-w-4xl mx-auto w-full px-6 pb-24 md:pb-12 mt-12 border-t border-slate-100">
+                <AdBanner slot="0987654321" />
+                <div className="text-center mt-4">
+                    <p className="text-[10px] text-slate-400 font-medium">© 2024 NurseAssistant Pro. All Rights Reserved.</p>
+                </div>
+            </footer>
+        </div>
+
         <div className="h-20 md:h-0" />
       </main>
 

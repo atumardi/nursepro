@@ -9,9 +9,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2683459350838265"
+     crossorigin="anonymous"></script>
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
+        }
+        /* Style untuk memastikan iklan tidak merusak layout */
+        .ad-container {
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
     </style>
 <script type="importmap">
@@ -29,7 +42,6 @@
 </head>
 <body class="bg-slate-50 text-slate-900">
     <div id="root"></div>
-    <!-- Vite akan secara otomatis memproses file tsx ini -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>

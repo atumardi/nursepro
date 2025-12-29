@@ -1,0 +1,8 @@
+{
+  "name": "NurseAssistant Pro",
+  "description": "A comprehensive digital assistant for nurses featuring automated SDKI diagnoses, medication calculators, and professional development resources.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

@@ -436,7 +436,7 @@ const BMICalculator = () => {
               <div className="text-[10px] font-bold text-slate-500">Overweight</div>
               <div className="text-[10px] font-bold text-yellow-600 text-right">25.0 - 29.9</div>
               <div className="text-[10px] font-bold text-slate-500">Obese</div>
-              <div className="text-[10px] font-bold text-red-600 text-right">> 30.0</div>
+              <div className="text-[10px] font-bold text-red-600 text-right">&gt; 30.0</div>
            </div>
         </div>
       </div>

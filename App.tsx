@@ -6,6 +6,8 @@ import NurseCalc from './components/NurseCalc';
 import NurseExpert from './components/NurseExpert';
 import ShiftHandover from './components/ShiftHandover';
 import UserProfile from './components/UserProfile';
+import AboutUs from './components/AboutUs';
+import PrivacyPolicy from './components/PrivacyPolicy';
 import Login from './components/Login';
 import { NavigationTab, AppUser } from './types';
 
@@ -87,6 +89,10 @@ const App: React.FC = () => {
         return <NurseExpert userRole={currentUser.role} />;
       case 'profile':
         return <UserProfile userName={currentUser.name} userEmail={currentUser.email} onUpdateProfile={handleUpdateProfile} />;
+      case 'about':
+        return <AboutUs onNavigateToPrivacy={() => setActiveTab('privacy')} />;
+      case 'privacy':
+        return <PrivacyPolicy />;
       default:
         return <QuickAskep />;
     }

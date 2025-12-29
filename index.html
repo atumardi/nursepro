@@ -22,10 +22,21 @@
         /* Style untuk memastikan iklan tidak merusak layout */
         .ad-container {
             min-height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 100%;
+            display: block;
+            margin: 0 auto;
             overflow: hidden;
+        }
+        /* Custom scrollbar for better UX */
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #e2e8f0;
+          border-radius: 10px;
         }
     </style>
 <script type="importmap">

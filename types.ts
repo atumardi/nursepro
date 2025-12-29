@@ -1,5 +1,5 @@
 
-export type NavigationTab = 'askep' | 'sbar' | 'calc' | 'expert' | 'profile';
+export type NavigationTab = 'askep' | 'sbar' | 'calc' | 'expert' | 'profile' | 'about' | 'privacy';
 
 export interface AppUser {
   name: string;

@@ -4,6 +4,49 @@ import { AskepDiagnosis, QuizQuestion, SBARData } from "../types";
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
+export const analyzeMedicalImage = async (base64Data: string, mimeType: string, type: 'EKG' | 'AGD'): Promise<string> => {
+  let prompt;
+  if (type === 'EKG') {
+    prompt = `Anda adalah asisten AI medis spesialis kardiologi. Tugas Anda adalah membantu perawat menganalisis gambar EKG ini. Berikan analisis sistematis dalam format MARKDOWN yang meliputi:
+
+- **Irama (Rhythm)**: Reguler atau tidak reguler.
+- **Laju Jantung (Heart Rate)**: Estimasi dalam bpm.
+- **Gelombang P**: Normal, tidak ada, atau anomali.
+- **Kompleks QRS**: Sempit atau lebar, durasi estimasi.
+- **Gelombang T**: Normal, inverted, atau anomali.
+- **Interval**: Estimasi interval PR, QRS, dan QT.
+- **Interpretasi Awal**: Berikan 2-3 kemungkinan indikasi (misal: Sinus Takikardia, Atrial Fibrilasi, dll).
+
+PENTING: Selalu sertakan disclaimer di akhir: "**Disclaimer: Analisis ini bersifat referensi dan harus dikonfirmasi oleh dokter spesialis jantung (Kardiolog).**"`;
+  } else { // AGD
+    prompt = `Anda adalah asisten AI medis spesialis perawatan kritis. Analisis gambar hasil Analisa Gas Darah (AGD) ini. Berikan interpretasi sistematis dalam format MARKDOWN yang meliputi nilai-nilai berikut dan interpretasinya:
+
+- **pH**: (nilai)
+- **PaCO2**: (nilai)
+- **HCO3**: (nilai)
+- **PaO2**: (nilai)
+- **Base Excess (BE)**: (nilai)
+- **Interpretasi Akhir**: Berikan kesimpulan (misal: Asidosis Respiratorik terkompensasi sebagian, Alkalosis Metabolik).
+
+PENTING: Selalu sertakan disclaimer di akhir: "**Disclaimer: Analisis ini bersifat referensi dan harus dikonfirmasi oleh dokter penanggung jawab.**"`;
+  }
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-flash-preview',
+    contents: [
+      {
+        inlineData: {
+          data: base64Data,
+          mimeType: mimeType
+        }
+      },
+      { text: prompt }
+    ]
+  });
+  
+  return response.text;
+};
+
 export const generateAskep = async (patientData: string): Promise<AskepDiagnosis[]> => {
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",

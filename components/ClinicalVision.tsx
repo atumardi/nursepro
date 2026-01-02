@@ -23,8 +23,9 @@ const ResultDisplay = ({ text }: { text: string }) => {
       if (line.startsWith('- ')) {
         return `<li key=${index} class="flex items-start gap-3"><span class="mt-1.5 w-1.5 h-1.5 bg-blue-400 rounded-full flex-shrink-0"></span>${line.substring(2)}</li>`;
       }
-      if (line.toLowerCase().includes('disclaimer')) {
-        return `<div key=${index} class="mt-6 p-4 bg-amber-50 text-amber-800 text-xs font-semibold rounded-2xl border border-amber-100">${line.replace('Disclaimer: ', '')}</div>`;
+      if (line.startsWith('<strong class="text-slate-800">PENTING:')) {
+        const cleanedLine = line.replace(/<strong class="text-slate-800">|<\/strong>/g, '');
+        return `<div key=${index} class="mt-6 p-4 bg-amber-50 text-amber-800 text-xs font-semibold rounded-2xl border border-amber-100"><strong>${cleanedLine}</strong></div>`;
       }
       return `<p key=${index}>${line}</p>`;
     }).join('');

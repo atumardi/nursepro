@@ -6,18 +6,29 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const analyzeMedicalImage = async (base64Data: string, mimeType: string, type: 'EKG' | 'AGD'): Promise<string> => {
   let prompt;
+  const fullDisclaimer = "**PENTING: Analisis ini dihasilkan oleh AI dan hanya bersifat sebagai referensi pendukung (Decision Support). Hasil ini bukan merupakan diagnosis final. Segera konsultasikan hasil ini dengan dokter spesialis jantung (Kardiolog) atau dokter penanggung jawab pasien sebelum mengambil tindakan medis.**";
+
   if (type === 'EKG') {
-    prompt = `Anda adalah asisten AI medis spesialis kardiologi. Tugas Anda adalah membantu perawat menganalisis gambar EKG ini. Berikan analisis sistematis dalam format MARKDOWN yang meliputi:
+    prompt = `Anda adalah Asisten AI Medis yang sangat terspesialisasi dalam interpretasi Elektrokardiogram (EKG). Tujuan utama Anda adalah untuk membantu staf perawat dengan memberikan analisis awal yang terstruktur dari gambar EKG.
 
-- **Irama (Rhythm)**: Reguler atau tidak reguler.
-- **Laju Jantung (Heart Rate)**: Estimasi dalam bpm.
-- **Gelombang P**: Normal, tidak ada, atau anomali.
-- **Kompleks QRS**: Sempit atau lebar, durasi estimasi.
-- **Gelombang T**: Normal, inverted, atau anomali.
-- **Interval**: Estimasi interval PR, QRS, dan QT.
-- **Interpretasi Awal**: Berikan 2-3 kemungkinan indikasi (misal: Sinus Takikardia, Atrial Fibrilasi, dll).
+IKUTI PROTOKOL ANALISIS INI DENGAN KETAT:
+1.  **Kualitas Gambar**: Nilai apakah garis grid dan gelombang EKG jelas. Jika buram, minta foto yang lebih jelas.
+2.  **Laju & Irama**: Perkirakan Denyut Jantung (BPM) dan tentukan apakah iramanya teratur atau tidak teratur.
+3.  **Morfologi Gelombang**:
+    -   Gelombang P: Ada/Tidak Ada, Rasio terhadap QRS.
+    -   Interval PR: Normal (0.12-0.20s) atau Memanjang.
+    -   Kompleks QRS: Sempit (<0.12s) atau Lebar.
+    -   Segmen ST: Isoelektrik, Elevasi, atau Depresi.
+    -   Gelombang T: Normal, Terbalik, atau Runcing.
+4.  **Interpretasi Awal**: Sebutkan ritme yang paling mungkin (misalnya, Irama Sinus Normal, Fibrilasi Atrium, Bradikardia Sinus, dll.).
 
-PENTING: Selalu sertakan disclaimer di akhir: "**Disclaimer: Analisis ini bersifat referensi dan harus dikonfirmasi oleh dokter spesialis jantung (Kardiolog).**"`;
+GAYA KOMUNIKASI:
+-   Gunakan terminologi klinis yang profesional.
+-   Ringkas dan terstruktur menggunakan poin-poin (bullet points).
+-   Balas dalam Bahasa Indonesia.
+
+Di akhir setiap analisis, Anda WAJIB menyertakan peringatan penting berikut dalam format tebal (markdown bold) persis seperti ini:
+${fullDisclaimer}`;
   } else { // AGD
     prompt = `Anda adalah asisten AI medis spesialis perawatan kritis. Analisis gambar hasil Analisa Gas Darah (AGD) ini. Berikan interpretasi sistematis dalam format MARKDOWN yang meliputi nilai-nilai berikut dan interpretasinya:
 
@@ -28,20 +39,18 @@ PENTING: Selalu sertakan disclaimer di akhir: "**Disclaimer: Analisis ini bersif
 - **Base Excess (BE)**: (nilai)
 - **Interpretasi Akhir**: Berikan kesimpulan (misal: Asidosis Respiratorik terkompensasi sebagian, Alkalosis Metabolik).
 
-PENTING: Selalu sertakan disclaimer di akhir: "**Disclaimer: Analisis ini bersifat referensi dan harus dikonfirmasi oleh dokter penanggung jawab.**"`;
+Gaya Komunikasi: Gunakan terminologi klinis profesional dan balas dalam Bahasa Indonesia.
+
+Di akhir setiap analisis, Anda WAJIB menyertakan peringatan penting berikut dalam format tebal (markdown bold) persis seperti ini:
+${fullDisclaimer}`;
   }
+
+  const imagePart = { inlineData: { data: base64Data, mimeType } };
+  const textPart = { text: prompt };
 
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
-    contents: [
-      {
-        inlineData: {
-          data: base64Data,
-          mimeType: mimeType
-        }
-      },
-      { text: prompt }
-    ]
+    contents: { parts: [imagePart, textPart] },
   });
   
   return response.text;
@@ -163,19 +172,12 @@ export const generateQuizQuestions = async (topic: string, count: number = 5): P
 };
 
 export const processQuizDocument = async (base64Data: string, mimeType: string): Promise<QuizQuestion[]> => {
+  const documentPart = { inlineData: { data: base64Data, mimeType } };
+  const textPart = { text: "Ekstrak semua pertanyaan pilihan ganda tentang keperawatan dari dokumen ini. Pastikan untuk mengambil pertanyaan, 4 pilihan jawaban, indeks jawaban yang benar (0-3), dan penjelasan singkat mengapa jawaban tersebut benar. Jika dokumen tidak memiliki format soal, buatlah 5 soal berdasarkan materi di dokumen tersebut. Gunakan Bahasa Indonesia." };
+
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
-    contents: [
-      {
-        inlineData: {
-          data: base64Data,
-          mimeType: mimeType
-        }
-      },
-      {
-        text: "Ekstrak semua pertanyaan pilihan ganda tentang keperawatan dari dokumen ini. Pastikan untuk mengambil pertanyaan, 4 pilihan jawaban, indeks jawaban yang benar (0-3), dan penjelasan singkat mengapa jawaban tersebut benar. Jika dokumen tidak memiliki format soal, buatlah 5 soal berdasarkan materi di dokumen tersebut. Gunakan Bahasa Indonesia."
-      }
-    ],
+    contents: { parts: [documentPart, textPart] },
     config: {
       responseMimeType: "application/json",
       responseSchema: {

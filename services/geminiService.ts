@@ -30,14 +30,17 @@ GAYA KOMUNIKASI:
 Di akhir setiap analisis, Anda WAJIB menyertakan peringatan penting berikut dalam format tebal (markdown bold) persis seperti ini:
 ${fullDisclaimer}`;
   } else { // AGD
-    prompt = `Anda adalah asisten AI medis spesialis perawatan kritis. Analisis gambar hasil Analisa Gas Darah (AGD) ini. Berikan interpretasi sistematis dalam format MARKDOWN yang meliputi nilai-nilai berikut dan interpretasinya:
+    prompt = `Anda adalah asisten AI medis spesialis perawatan kritis. Analisis gambar hasil Analisa Gas Darah (AGD) ini. Berikan interpretasi sistematis dalam format MARKDOWN yang terstruktur seperti di bawah ini.
 
-- **pH**: (nilai)
-- **PaCO2**: (nilai)
-- **HCO3**: (nilai)
-- **PaO2**: (nilai)
-- **Base Excess (BE)**: (nilai)
-- **Interpretasi Akhir**: Berikan kesimpulan (misal: Asidosis Respiratorik terkompensasi sebagian, Alkalosis Metabolik).
+**Analisa Gas Darah**
+- pH: [nilai dari gambar]
+- PaCO2: [nilai dari gambar]
+- HCO3: [nilai dari gambar]
+- PaO2: [nilai dari gambar]
+- Base Excess (BE): [nilai dari gambar]
+
+**Interpretasi Akhir**
+[kesimpulan Anda di sini, misal: Asidosis Respiratorik terkompensasi sebagian]
 
 Gaya Komunikasi: Gunakan terminologi klinis profesional dan balas dalam Bahasa Indonesia.
 
